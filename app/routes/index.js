@@ -1,16 +1,13 @@
 /*
 This file covers the application routing logic
-each route is defined in its own JavaScript file
+each route is controlled by its own JS file
 */
 
-const path       = require("path");
-const test_route = require("./test.js");
-const root_route = require("./root.js");
+const path        = require("path");
+const root_route  = require("./root.js");
+const price_route = require("./price.js");
 
 module.exports = function(app) {
-    /*main directory*/
     root_route(app);
-
-    /*for testing purpose, remove later*/
-    test_route(app);
+    price_route(app);
 }
