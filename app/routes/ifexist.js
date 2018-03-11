@@ -3,7 +3,7 @@ const path = require("path");
 const request = require('request');
 
 module.exports = function(app) {
-    app.route("/ifexist/:symbol")
+    app.route("/if/:symbol")
         .get(function (req, res) {
             var symbol = req.params.symbol;
             if (!symbol) {
@@ -18,7 +18,7 @@ module.exports = function(app) {
             request(options, function (error, response, body) {
                 if (error)
                     return res.status(500).send("Server error");
-                    
+
                 var body = JSON.parse(body);
                 if (body.error)
                     return res.status(200).send("0");
