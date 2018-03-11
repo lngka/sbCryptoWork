@@ -1,0 +1,28 @@
+{
+  "name": "sbcryptowork",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \\\"Error: no test specified\\\" && 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lngka/sbCryptoWork.git"
+  },
+  "keywords": [
+    "crypto",
+    "indicators",
+    "chart"
+  ],
+  "author": "Ck Nguyen, Nguyen Quoc Hung",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lngka/sbCryptoWork/issues"
+  },
+  "homepage": "https://github.com/lngka/sbCryptoWork#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "path": "^0.12.7"
+  }
+}
