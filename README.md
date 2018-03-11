@@ -1,2 +1,2 @@
 # sbCryptoWork
-nothing here yet...
+Run: $ node server.js
