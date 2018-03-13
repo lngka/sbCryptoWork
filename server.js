@@ -2,9 +2,11 @@
 const express = require("express");
 const path    = require("path");
 const routes  = require(path.join(process.cwd(), "app", "routes", "index.js"));
+const cors    = require("cors");
 
 // Creating main application object...
 const app     = express();
+app.use(cors())
 
 // Enable access to general resources folder...
 app.use('/public', express.static(path.join(process.cwd(), "public")));
