@@ -16,6 +16,7 @@ app.use('/controllers', express.static(path.join(process.cwd(), "app", "controll
 routes(app);
 
 // Lauching 3, 2, 1..
-app.listen(3000, (err) => {
-    console.log("yeah? listening on 3000");
+app.listen(process.env.PORT, (err) => {
+    if (err) throw err;
+    console.log("yeah? listening on " + process.env.PORT);
 })

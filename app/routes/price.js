@@ -1,6 +1,6 @@
 "use strict";
 const path = require("path");
-const request = require('request');
+const request = require("request");
 
 
 module.exports = function(app) {
@@ -15,7 +15,7 @@ module.exports = function(app) {
                 "url": "https://min-api.cryptocompare.com/data/price?"
                         +"fsym=" + from + "&tsyms=" + to,
                 "method": "GET"
-            }
+            };
 
             request(options, function (error, response, body) {
                 if (error)
