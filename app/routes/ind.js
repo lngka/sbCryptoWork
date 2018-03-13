@@ -7,7 +7,7 @@ module.exports = function(app) {
     app.route("/ind")
         .get(function(req, res) {
             var ind_type = req.query.type;
-            var params = req.query.p;
+            var params = req.query.params;
             
             if(!ind_type)
                 return res.code(400).send("Bad request: Indicator missing");
