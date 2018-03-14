@@ -8,13 +8,13 @@ module.exports = function(app) {
         .get(function(req, res) {
             var ind_type = req.query.type;
             var params = req.query.params;
-            
+
             if(!ind_type)
-                return res.code(400).send("Bad request: Indicator missing");
-            
+                return res.code(400).send("Bad request: Missing parameters");
+
             if(params)
                 params = params.split(",").map((x) => parseInt(x));
-            
+
             calculator(ind_type, params, function(err, result) {
                if (err) {
                    return res.status(500).send(err.message);
