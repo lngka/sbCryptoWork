@@ -2,25 +2,46 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-fetch('/p?from=BTC&to=USD')
-    .then(response => {
-        return response.text();
-    })
-    .then(text => {
-        console.log(text);
-    });
+import {getPrice, ifExist, Indicators} from './Api/cryptoApi';
+// fetch('/p?from=BTC&to=USD')
+//     .then(response => {
+//         return response.text();
+//     })
+//     .then(text => {
+//         console.log(text);
+//     });
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    let from = 'BTC';
+    let to = 'USD';
+    let value = 'BTC';
+    let type = 'rsi', params = 14, pair = ["BTC","USD"], timeframe = 1440;
+    let price1 = getPrice(from, to)
+      .then(results => {
+        console.log("price: ", results);
+      });
+    
+    let price2 = ifExist(value)
+      .then(results => {
+        console.log("exist: ", value);
+      });
+
+    let price3 = Indicators(type, params, pair, timeframe)
+      .then(results => {
+        console.log("Indicators", results);
+      });
+    
+      this.state = {
+        checkIndi: price3
+      }
+  }
+  
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        {this.state.checkIndi}
       </div>
     );
   }
