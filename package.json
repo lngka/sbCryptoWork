@@ -23,10 +23,13 @@
   "homepage": "https://github.com/lngka/sbCryptoWork#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
     "express": "^4.16.2",
     "path": "^0.12.7",
     "request": "^2.83.0",
-    "tulind": "^0.8.9",
-    "cors": "^2.8.4"
+    "tulind": "^0.8.9"
+  },
+  "devDependencies": {
+    "node-pre-gyp": "^0.9.0"
   }
 }
