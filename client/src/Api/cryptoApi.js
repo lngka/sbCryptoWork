@@ -1,12 +1,14 @@
 export async function getPrice(from, to) {
   const response = await fetch(`/p?from=${from}&to=${to}`);
   const responseData = response.json();
+  
   return responseData;
+ 
 }
 
 export async function ifExist(value) {
   const response = await fetch(`/if/${value}`);
-  const responseData = response.text();
+  const responseData = response.json();
   return responseData;
 }
 
