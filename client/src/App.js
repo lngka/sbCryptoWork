@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import {Container, Row, Col} from 'reactstrap'
+import WatchList from './Components/watchList/watchList';
 import {getPrice, ifExist, Indicators} from './Api/cryptoApi';
 // fetch('/p?from=BTC&to=USD')
 //     .then(response => {
@@ -14,35 +16,60 @@ import {getPrice, ifExist, Indicators} from './Api/cryptoApi';
 class App extends Component {
   constructor(props) {
     super(props);
+    
+    this.state = {
+      price: []
+    }
+    // let value = 'BTC';
+    // let type = 'rsi', params = 14, pair = ["BTC","USD"], timeframe = 1440;
+    
+    // let price2 = ifExist(value)
+    //   .then(results => {
+    //     console.log("exist: ", results);
+    //   });
+
+    // let price3 = Indicators(type, params, pair, timeframe)
+    //   .then(results => {
+    //     console.log("Indicators", results);
+    //   });
+    
+      
+  }
+
+  async componentDidMount() {
     let from = 'BTC';
     let to = 'USD';
-    let value = 'BTC';
-    let type = 'rsi', params = 14, pair = ["BTC","USD"], timeframe = 1440;
-    let price1 = getPrice(from, to)
-      .then(results => {
-        console.log("price: ", results);
-      });
+    const newArray = [].concat(this.state.price);
     
-    let price2 = ifExist(value)
-      .then(results => {
-        console.log("exist: ", value);
-      });
+    // getPrice(from, to)
+    //   .then(results => {
+    //     newArray.push(results);
+    //   });
+    
+    // this.setState({ price: newArray }, () => console.log(this.state.price));
 
-    let price3 = Indicators(type, params, pair, timeframe)
+    await getPrice(from, to)
       .then(results => {
-        console.log("Indicators", results);
+        newArray.push(results);
+        this.setState({price: newArray}, () => console.log(this.state.price));
       });
     
-      this.state = {
-        checkIndi: price3
-      }
   }
   
   render() {
+    const data = this.state;
     return (
-      <div className="App">
-        {this.state.checkIndi}
-      </div>
+      <Container fluid={true}>
+        {data.price.map((value) => (
+          <p key={value.USD}>{value.USD}</p>
+        ))}
+        <Row>
+          <Col xs="6" sm="6" md="9"></Col>
+          <Col xs="6" sm="6" md="3">
+            <WatchList />
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }
