@@ -1,7 +1,7 @@
 import React from 'react';
-import { ListGroup, ListGroupItem, Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, FormText} from 'reactstrap';
+import { ListGroup, ListGroupItem, Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, FormText, Alert } from 'reactstrap';
 import { ifExist, getPrice } from '../../Api/cryptoApi';
-import WatchListItem from './watchList_item';
+
 
 export default class WatchList extends React.Component {
   constructor(props) {
@@ -55,7 +55,43 @@ export default class WatchList extends React.Component {
     });
   }
 
+  onLoad(value) {
+    this.props.onLoad(value);
+  }
+
+  showAlert(message, className) {
+    this.clearAlert();
+    const div = document.getElementById('alertMessage');
+    div.innerHTML =`<div class="alert alert-${className}" role="alert">${message}</div>`;
+    
+    setTimeout(() => {
+      this.clearAlert();
+    }, 2000);
+  }
+
+  clearAlert() {
+    const currentAlert = document.querySelector('.alert');
+    if(currentAlert) {
+      currentAlert.remove();
+    }
+  }
+
+  onDelete(value) {
+    const newArray = [].concat(this.state.price);
+    let index = newArray.findIndex(x => x.value === value.value);
+    
+    newArray.splice(index, 1);
+    this.setState({
+      from: '',
+      to: 'USD',
+      price: newArray
+    });
+
+    this.showAlert('Pair is deleted', 'success');
+  }
+
   async save(e) {
+    
     let value = this.state.from
 
     if(value !== '') {
@@ -72,6 +108,7 @@ export default class WatchList extends React.Component {
     if(this.state.isReal === true) {
       let valueFrom = this.state.from;
       let valueTo = this.state.to;
+      
       let newValue = {};
       const newArray = this.state.price.slice();
       // let newArray = [].concat(this.state.price);
@@ -85,13 +122,31 @@ export default class WatchList extends React.Component {
 
       await getPrice(valueFrom, valueTo)
         .then(results => {
-          console.log(results);
-          newValue = results;
+          let codeCurrency = `${valueFrom}/${valueTo}`;
+          let value = results[Object.getOwnPropertyNames(results)];
+          
+          newValue = {
+            value: value,
+            codeCurrency: codeCurrency,
+            renderBl: false
+          }
+
+          newArray.push(newValue);
         });
-      newArray.push(newValue);
-      this.setState({
-        price: newArray
-      })
+        let checkArr = newArray.map(item => item.value);
+        let hasDuplicate = false;
+        checkArr.sort().sort((a, b) => {
+          if (a === b) hasDuplicate = true
+        });
+        
+        if(hasDuplicate) {
+          this.showAlert('This pair has already added', 'warning');
+        } else {
+          this.setState({
+            price: newArray
+          })
+        }
+     
 
       // await getPrice(valueFrom, valueTo) 
       //   .then(results => {
@@ -101,21 +156,31 @@ export default class WatchList extends React.Component {
       //   this.setState({
       //     price: newArray
       //   })
-    } 
+    } else {
+      this.showAlert('This currency code is not real!', 'danger');
+      this.setState({
+        modal: false,
+        from: '',
+        to: 'USD'
+      });
+    }
 
     this.setState({
       modal: false
     });
+    e.persist();
   }
 
-  
-
   render() {
+    if (this.state.price === []) {
+      return <div>Loading...</div>
+    }
     return (
       <div>
+        <div id="alertMessage"></div>
         <Button outline color="success" onClick={this.toggle}>Add new</Button>
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-          <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+          <ModalHeader toggle={this.toggle}>Add to Follow:</ModalHeader>
           <ModalBody>
           <Form>
             <FormGroup>
@@ -139,8 +204,8 @@ export default class WatchList extends React.Component {
         </Modal>
         
         <ListGroup>
-          {this.state.price.map((value, index) => (
-            <ListGroupItem tag="button" action key={value[Object.getOwnPropertyNames(value)]}>{value[Object.getOwnPropertyNames(value)]}</ListGroupItem>
+          {this.state.price.map((value) => (
+            (value.value !== '') ? <ListGroupItem tag="a" action key={value.value} onClick = {this.onLoad.bind(this, value)}>{value.codeCurrency} <Button outline color="danger" onClick={this.onDelete.bind(this, value)}>X</Button></ListGroupItem> : ''
           ))}
         </ListGroup>        
       </div>
