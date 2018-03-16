@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import {Container, Row, Col} from 'reactstrap'
+import {Container, Row, Col, Badge} from 'reactstrap'
 import WatchList from './Components/watchList/watchList';
 import {getPrice, ifExist, Indicators} from './Api/cryptoApi';
 // fetch('/p?from=BTC&to=USD')
@@ -18,7 +18,7 @@ class App extends Component {
     super(props);
     
     this.state = {
-      price: []
+      data: {}
     }
     // let value = 'BTC';
     // let type = 'rsi', params = 14, pair = ["BTC","USD"], timeframe = 1440;
@@ -36,37 +36,43 @@ class App extends Component {
       
   }
 
-  async componentDidMount() {
-    let from = 'BTC';
-    let to = 'USD';
-    const newArray = [].concat(this.state.price);
+  onLoad(thRow) {
     
-    // getPrice(from, to)
-    //   .then(results => {
-    //     newArray.push(results);
-    //   });
-    
-    // this.setState({ price: newArray }, () => console.log(this.state.price));
-
-    await getPrice(from, to)
-      .then(results => {
-        newArray.push(results);
-        this.setState({price: newArray}, () => console.log(this.state.price));
-      });
-    
+    this.setState({
+      data: thRow
+    });
   }
+
+  // async componentDidMount() {
+  //   let from = 'BTC';
+  //   let to = 'USD';
+  //   const newArray = [].concat(this.state.price);
+    
+  //   // getPrice(from, to)
+  //   //   .then(results => {
+  //   //     newArray.push(results);
+  //   //   });
+    
+  //   // this.setState({ price: newArray }, () => console.log(this.state.price));
+
+  //   await getPrice(from, to)
+  //     .then(results => {
+  //       newArray.push(results);
+  //       this.setState({price: newArray}, () => console.log(this.state.price));
+  //     });
+    
+  // }
   
   render() {
     const data = this.state;
     return (
       <Container fluid={true}>
-        {data.price.map((value) => (
-          <p key={value.USD}>{value.USD}</p>
-        ))}
         <Row>
-          <Col xs="6" sm="6" md="9"></Col>
+          <Col xs="6" sm="6" md="9">
+            <h3><Badge color="primary">{this.state.data.value}</Badge></h3>
+          </Col>
           <Col xs="6" sm="6" md="3">
-            <WatchList />
+            <WatchList onLoad = {thRow => this.onLoad(thRow)} />
           </Col>
         </Row>
       </Container>

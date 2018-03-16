@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListGroup, ListGroupItem } from 'reactstrap';
+import { ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { getPrice } from '../../Api/cryptoApi';
 
 export default class WatchListItem extends React.Component {
