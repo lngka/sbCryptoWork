@@ -18,7 +18,8 @@ class App extends Component {
     super(props);
     
     this.state = {
-      data: {}
+      data: {},
+      message: ''
     }
     // let value = 'BTC';
     // let type = 'rsi', params = 14, pair = ["BTC","USD"], timeframe = 1440;
@@ -39,8 +40,10 @@ class App extends Component {
   onLoad(thRow) {
     
     this.setState({
-      data: thRow
+      data: thRow,
+      message: `${thRow.codeCurrency}: ${thRow.value}`
     });
+
   }
 
   // async componentDidMount() {
@@ -69,7 +72,13 @@ class App extends Component {
       <Container fluid={true}>
         <Row>
           <Col xs="6" sm="6" md="9">
-            <h3><Badge color="primary">{this.state.data.value}</Badge></h3>
+            {this.state.message !== '' ?
+              <h3><Badge color="primary"> {
+                this.state.message !== '' ?
+                this.state.message : ''}</Badge></h3> :
+                null
+            }
+            
           </Col>
           <Col xs="6" sm="6" md="3">
             <WatchList onLoad = {thRow => this.onLoad(thRow)} />

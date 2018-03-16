@@ -1,7 +1,7 @@
 import React from 'react';
 import { ListGroup, ListGroupItem, Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, FormText, Alert } from 'reactstrap';
 import { ifExist, getPrice } from '../../Api/cryptoApi';
-import WatchListItem from './watchList_item';
+
 
 export default class WatchList extends React.Component {
   constructor(props) {
