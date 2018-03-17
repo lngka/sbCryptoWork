@@ -4,7 +4,6 @@ const request    = require("request");
 const calculator = require(path.join(process.cwd(), "app", "controllers", "ind.calculator.js"));
 
 
-
 module.exports = function(app) {
     const TIMEFRAME_CODES = process.env.TIMEFRAME_CODES.split(",");
     const TIMEFRAME_CODES_AGG = process.env.TIMEFRAME_CODES_AGGREGATE.split(",");
@@ -15,7 +14,7 @@ module.exports = function(app) {
             var options = req.query.options;
             var pair   = req.query.pair.split(",");
             var tframe = req.query.timeframe.split("");
-            console.log(TIMEFRAME_CODES.includes(tframe[0]));
+
             if(!ind_type)
                 return res.status(400).send("Bad request: Missing indicator type");
 

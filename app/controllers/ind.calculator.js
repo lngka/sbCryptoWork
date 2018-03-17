@@ -45,7 +45,7 @@ module.exports = function(ind_type, options, pair, tframe, callback) {
         // Calling the correct function
         switch (ind_type) {
             case "sma":
-                sma(options, pair, tframe, callback);
+                workWithSMA(options, pair, tframe, callback);
                 break;
             default: // for unimplemented indicator
                 return callback(null, "Received " + ind_type);
@@ -54,20 +54,41 @@ module.exports = function(ind_type, options, pair, tframe, callback) {
 }
 /*
 * Calculate Simple Moving Average
-* @param options {array of 1 int} number of periods to be averaged together
+* @param period {array of 1 int} number of periods to be averaged together
 * @param pair {string array} for example: BTC/USD is ["BTC", "USD"]
 * @param tframe {int} the timeframe of each trading period
 * @param callback {function} will be called with: err, result
 * @return sma {array of real}
 */
-function sma(options, pair, tframe, callback) {
-    //TODO
-    // histohour(fsym, tsym, aggregate, callback)
-    CryptoCompare.histohour(pair[0], pair[1], 1, function(err, data) {
-        if (err)
-            return callback(err, null);
-        return callback(null, data);
-    });
+function workWithSMA(period, pair, tframe, callback) {
+    const sma = tulind.indicators.sma.indicator;
+
+    //HOURLY FRAME STARTS
+    if (tframe[0] == "H") {
+        CryptoCompare.histohour(pair[0], pair[1], tframe[1], function(err, rawdata) {
+            if (err) return callback(err, null);
+
+            // prepare the dataset according to SMA requirement
+            var dataset =[];
+            rawdata.forEach(function(datapoint) {
+                if (!datapoint.close) {
+                    var e1 = new Error("workWithSMA: Missing price data");
+                    return callback(e1, null)
+                } else {
+                    // by defaulf collects closing price
+                    dataset.push(datapoint.close);
+                }
+            });
+
+            sma([dataset], period, function(err, results) {
+                if(err) return callback(err, null);
+                // results is an array of 1 array
+                return callback(null, results[0]);
+            });
+        });
+    }
+    //HOURLY FRAME ENDS
+    //TODO: implement daily, minute frame
 }
 
 

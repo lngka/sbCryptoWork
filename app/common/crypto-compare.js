@@ -1,11 +1,11 @@
 "use strict";
 const request = require("request");
+
 /*
 * This module is used to communicate with Crypto Compare
 * OHLC: Open, High, Low, Close
-* @func histohour: Get OHLCV from the hourly historical data
+* @function histohour: Get OHLCV from the hourly historical data
 */
-
 const CryptoCompare = {
     "histohour": histohour
 };
@@ -18,6 +18,8 @@ module.exports = CryptoCompare;
 * @param callback {function} will be called with: err, data
 */
 function histohour(fsym, tsym, aggregate, callback){
+    const CRYPTO_LIMIT = parseInt(process.env.CRYPTO_LIMIT);
+    
     var options = {
         "method": "GET",
         "baseUrl": process.env.CRYPTO_COMPARE,
@@ -26,8 +28,9 @@ function histohour(fsym, tsym, aggregate, callback){
         "qs": {
             "fsym": fsym,
             "tsym": tsym,
-            "aggregate": aggregate,
-            "limit": process.env.CRYPTO_LIMIT
+            // aggregate must smaller than limit, default = 1 = no aggregation
+            "aggregate": (aggregate < CRYPTO_LIMIT)? aggregate : 1,
+            "limit": CRYPTO_LIMIT
         }
     }
 
