@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \\\"Error: no test specified\\\" && 1"
+    "test": "echo \\\"Error: no test specified\\\" && 1",
+    "start": "concurrently \"node server.js\" \"cd client && npm start\""
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "tulind": "^0.8.9"
   },
   "devDependencies": {
-    "node-pre-gyp": "^0.9.0"
+    "node-pre-gyp": "^0.9.0",
+    "concurrently": "^3.5.1",
   }
 }
