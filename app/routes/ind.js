@@ -7,6 +7,7 @@ const calculator = require(path.join(process.cwd(), "app", "controllers", "ind.c
 
 module.exports = function(app) {
     const TIMEFRAME_CODES = process.env.TIMEFRAME_CODES.split(",");
+    const TIMEFRAME_CODES_AGG = process.env.TIMEFRAME_CODES_AGGREGATE.split(",");
 
     app.route("/ind")
         .get(function(req, res) {
@@ -25,7 +26,9 @@ module.exports = function(app) {
                 return res.status(400).send("Bad request: Invalid timeframe format");
 
             if(!TIMEFRAME_CODES.includes(tframe[0]))
-                return res.status(400).send("Bad request: Timeframe " + tframe[0] + " not recognized");
+                return res.status(400).send("Bad request: Timeframe " + tframe + " not recognized");
+            if(!TIMEFRAME_CODES_AGG.includes(tframe[1]))
+                return res.status(400).send("Bad request: Timeframe " + tframe + " not recognized");
 
             if(options)
                 options = options.split(",").map((x) => parseInt(x));
