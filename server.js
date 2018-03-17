@@ -5,17 +5,17 @@ const routes  = require(path.join(process.cwd(), "app", "routes", "index.js"));
 const cors    = require("cors");
 
 // Creating environment variables
-require('dotenv').config();
+require("dotenv").config();
 
 // Creating main application object...
 const app     = express();
 app.use(cors())
 
 // Enable access to general resources folder...
-app.use('/public', express.static(path.join(process.cwd(), "public")));
+app.use("/public", express.static(path.join(process.cwd(), "public")));
 
 // Enable access to controllers folder...
-app.use('/controllers', express.static(path.join(process.cwd(), "app", "controllers")));
+app.use("/controllers", express.static(path.join(process.cwd(), "app", "controllers")));
 
 // Applying routing logic...
 routes(app);
@@ -24,4 +24,5 @@ routes(app);
 app.listen(8080, (err) => {
     if (err) throw err;
     console.log("yeah? listening on " + 8080);
+    // console.log(process.env.TIMEFRAME_CODES);
 })

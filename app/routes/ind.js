@@ -3,22 +3,29 @@ const path       = require("path");
 const request    = require("request");
 const calculator = require(path.join(process.cwd(), "app", "controllers", "ind.calculator.js"));
 
+
+
 module.exports = function(app) {
+    const TIMEFRAME_CODES = process.env.TIMEFRAME_CODES.split(",");
+
     app.route("/ind")
         .get(function(req, res) {
             var ind_type = req.query.type;
             var options = req.query.options;
             var pair   = req.query.pair.split(",");
             var tframe = req.query.timeframe.split("");
-
+            console.log(TIMEFRAME_CODES.includes(tframe[0]));
             if(!ind_type)
-                return res.code(400).send("Bad request: Missing indicator type");
+                return res.status(400).send("Bad request: Missing indicator type");
 
             if(pair.length != 2)
-                return res.code(400).send("Bad request: Invalid pair format");
+                return res.status(400).send("Bad request: Invalid pair format");
 
             if(tframe.length != 2)
-                return res.code(400).send("Bad request: Invalid timeframe format");
+                return res.status(400).send("Bad request: Invalid timeframe format");
+
+            if(!TIMEFRAME_CODES.includes(tframe[0]))
+                return res.status(400).send("Bad request: Timeframe " + tframe[0] + " not recognized");
 
             if(options)
                 options = options.split(",").map((x) => parseInt(x));
