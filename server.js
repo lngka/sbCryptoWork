@@ -4,6 +4,9 @@ const path    = require("path");
 const routes  = require(path.join(process.cwd(), "app", "routes", "index.js"));
 const cors    = require("cors");
 
+// Creating environment variables
+require('dotenv').config();
+
 // Creating main application object...
 const app     = express();
 app.use(cors())
