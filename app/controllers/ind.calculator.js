@@ -48,7 +48,7 @@ module.exports = function(ind_type, options, pair, tframe, callback) {
                 workWithSMA(options, pair, tframe, callback);
                 break;
             default: // for unimplemented indicator
-                return callback(null, "Received " + ind_type);
+                return callback(null, ind_type + " coming soon");
         }
     }
 }
@@ -63,32 +63,39 @@ module.exports = function(ind_type, options, pair, tframe, callback) {
 function workWithSMA(period, pair, tframe, callback) {
     const sma = tulind.indicators.sma.indicator;
 
-    //HOURLY FRAME STARTS
-    if (tframe[0] == "H") {
-        CryptoCompare.histohour(pair[0], pair[1], tframe[1], function(err, rawdata) {
-            if (err) return callback(err, null);
+    switch (tframe[0].toUpperCase()) {
+        case "H":
+            CryptoCompare.histohour(pair[0], pair[1], tframe[1], calculateSMA);
+            break;
+        case "D":
+            CryptoCompare.histoday(pair[0], pair[1], tframe[1], calculateSMA);
+            break;
+        case "M":
+            CryptoCompare.histominute(pair[0], pair[1], tframe[1], calculateSMA);
+            break;
+    }
+    //CryptoCompare call this function with (err, rawdata) accordingly
+    function calculateSMA(err, rawdata) {
+        if (err) return callback(err, null);
 
-            // prepare the dataset according to SMA requirement
-            var dataset =[];
-            rawdata.forEach(function(datapoint) {
-                if (!datapoint.close) {
-                    var e1 = new Error("workWithSMA: Missing price data");
-                    return callback(e1, null)
-                } else {
-                    // by defaulf collects closing price
-                    dataset.push(datapoint.close);
-                }
-            });
+        // prepare the dataset according to SMA requirement
+        var dataset =[];
+        rawdata.forEach(function(datapoint) {
+            if (!datapoint.close) {
+                var e1 = new Error("workWithSMA: Missing price data");
+                return callback(e1, null)
+            } else {
+                // by defaulf collects closing price
+                dataset.push(datapoint.close);
+            }
+        });
 
-            sma([dataset], period, function(err, results) {
-                if(err) return callback(err, null);
-                // results is an array of 1 array
-                return callback(null, results[0]);
-            });
+        sma([dataset], period, function(err, results) {
+            if(err) return callback(err, null);
+            // results is an array of 1 array
+            return callback(null, results[0]);
         });
     }
-    //HOURLY FRAME ENDS
-    //TODO: implement daily, minute frame
 }
 
 

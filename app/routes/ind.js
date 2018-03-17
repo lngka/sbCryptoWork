@@ -13,7 +13,7 @@ module.exports = function(app) {
             var ind_type = req.query.type;
             var options = req.query.options;
             var pair   = req.query.pair.split(",");
-            var tframe = req.query.timeframe.split("");
+            var tframe = formatTframe(req.query.timeframe);
 
             if(!ind_type)
                 return res.status(400).send("Bad request: Missing indicator type");
@@ -21,7 +21,7 @@ module.exports = function(app) {
             if(pair.length != 2)
                 return res.status(400).send("Bad request: Invalid pair format");
 
-            if(tframe.length != 2)
+            if(tframe.length < 2 || tframe.length > 4)
                 return res.status(400).send("Bad request: Invalid timeframe format");
 
             if(!TIMEFRAME_CODES.includes(tframe[0]))
@@ -40,4 +40,12 @@ module.exports = function(app) {
                }
             });
         });
+}
+
+/*first character must in ["M", "D", "H"], the rest of the string is an int*/
+function formatTframe(string) {
+    var result = [];
+    result.push(string.charAt(0));
+    result.push(string.slice(1));
+    return result;
 }
