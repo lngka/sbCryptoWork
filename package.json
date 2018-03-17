@@ -32,6 +32,6 @@
   },
   "devDependencies": {
     "node-pre-gyp": "^0.9.0",
-    "concurrently": "^3.5.1",
+    "concurrently": "^3.5.1"
   }
 }
