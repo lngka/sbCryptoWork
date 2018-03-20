@@ -26,3 +26,12 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.btn-outline-success {
+  position: relative;
+  right: 0;
+}
+
+.list-group {
+  margin-top: 50px;
+}

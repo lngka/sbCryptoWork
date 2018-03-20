@@ -46,6 +46,16 @@ class App extends Component {
 
   }
 
+  async componentDidMount() {
+    let type = 'sma';
+    let options = 1;
+    let pair = ['BTC','USD'];
+    let timeframe = 'D30';
+
+    await Indicators(type, options, pair, timeframe) 
+      .then(results => console.log(results));
+  }
+
   // async componentDidMount() {
   //   let from = 'BTC';
   //   let to = 'USD';
